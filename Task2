@@ -1,0 +1,42 @@
+1
+
+\connect university
+SELECT 
+	last_name,
+    first_name
+From student
+WHERE SUBSTRING(UPPER(last_name) FROM 1 FOR 1)=SUBSTRING(UPPER(first_name) FROM 1 FOR 1)
+Order By last_name, first_name ASC
+
+
+
+2
+\connect university
+Select 
+	SUBSTRING(UPPER(first_name) FROM 1 for 1) as letter,
+    count (SUBSTRING(first_name FROM 1 for 1)) as count
+from student
+group by SUBSTRING(UPPER(first_name) FROM 1 for 1)
+ORDER by SUBSTRING(UPPER(first_name) FROM 1 for 1) ASC
+
+
+3
+\connect university
+Select  
+	case when sum(counts)>0 then sum(counts)
+	ELSE 0 
+	end as count
+from 
+	(select count(lower(first_name)) as counts
+	from student as st
+	GROUP by lower(first_name))  as x
+where counts>1
+
+
+
+4
+\connect university
+SELECT first_name, last_name
+FROM student
+WHERE (DATE('now') - birth_date) > (SELECT AVG(DATE('now') - birth_date) FROM student);
+
